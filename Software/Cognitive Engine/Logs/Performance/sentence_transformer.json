@@ -1,0 +1,23 @@
+{
+    "elapsed_time_sec": 5.65,
+    "ram_before_mb": 391.96,
+    "ram_after_mb": 415.04,
+    "ram_delta_mb": 23.08,
+    "cpu_percent": 39.0,
+    "gpu_percent": 0,
+    "gpu_before_percent": 3,
+    "vram_before_mb": 1325.015625,
+    "vram_after_mb": 1317.7890625,
+    "vram_delta_mb": -7.23,
+    "model": "all-MiniLM-L6-v2",
+    "load_time_sec": 5.635,
+    "average_latency_ms": 24.58,
+    "embedding_dimension": 384,
+    "runs": 5,
+    "similarities": {
+        "Band Similarity": 0.801,
+        "Random Similarity": -0.033,
+        "Project Similarity": 0.551
+    },
+    "recommendation": "Excellent semantic representation."
+}

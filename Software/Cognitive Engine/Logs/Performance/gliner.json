@@ -1,0 +1,12 @@
+{
+    "elapsed_time_sec": 7.327,
+    "ram_mb": 1617.7,
+    "cpu_percent": 45.5,
+    "gpu_percent": 0,
+    "gpu_memory_mb": 574.890625,
+    "model": "GLiNER Medium v2.1",
+    "load_time_sec": 7.327,
+    "average_latency_ms": 156.37,
+    "average_confidence": 0.918,
+    "runs": 5
+}

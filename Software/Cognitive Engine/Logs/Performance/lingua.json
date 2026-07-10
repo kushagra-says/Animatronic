@@ -1,0 +1,11 @@
+{
+    "elapsed_time_sec": 0.0,
+    "ram_mb": 57.24,
+    "cpu_percent": 0.0,
+    "gpu_percent": 0,
+    "gpu_memory_mb": 569.8046875,
+    "model": "Lingua",
+    "load_time_sec": 0.0,
+    "average_latency_ms": 2.47,
+    "runs": 5
+}

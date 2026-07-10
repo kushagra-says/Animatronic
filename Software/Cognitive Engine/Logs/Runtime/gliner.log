@@ -1,0 +1,6 @@
+2026-07-10 17:14:54,330 | INFO | Loading the following GLiNER type: <class 'gliner.model.UniEncoderSpanGLiNER'>...
+2026-07-10 17:14:59,075 | INFO | GLiNER loaded successfully.
+2026-07-10 17:14:59,935 | INFO | GLiNER benchmark completed.
+2026-07-10 19:06:01,697 | INFO | Loading the following GLiNER type: <class 'gliner.model.UniEncoderSpanGLiNER'>...
+2026-07-10 19:06:07,989 | INFO | GLiNER loaded successfully.
+2026-07-10 19:06:08,892 | INFO | GLiNER benchmark completed.
