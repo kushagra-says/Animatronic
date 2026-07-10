@@ -4,9 +4,9 @@ import time
 
 from gliner import GLiNER
 
-from config import PERFORMANCE_LOGS_DIR
-from logger import get_logger
-from performance_monitor import PerformanceMonitor
+from Utilities.config import PERFORMANCE_LOGS_DIR
+from Utilities.logger import get_logger
+from Utilities.performance_monitor import PerformanceMonitor
 
 
 logger = get_logger("gliner")
