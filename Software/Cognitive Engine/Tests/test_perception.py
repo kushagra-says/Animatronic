@@ -40,14 +40,26 @@ def main():
 
     print("-" * 50)
 
-    print(perception.language)
+    print(perception.language.language)
 
     print(
-
         f"Confidence : "
+        f"{perception.language.confidence:.3f}"
+    )
 
-        f"{perception.language_confidence:.3f}"
+    print(
+    f"Extractor   : "
+    f"{perception.language.extractor}"
+    )
 
+    print(
+        f"Model       : "
+        f"{perception.language.model}"
+    )
+
+    print(
+        f"Version     : "
+        f"{perception.language.version}"
     )
 
     print("\nEntities")
@@ -56,18 +68,42 @@ def main():
 
     for entity in perception.entities:
 
-        print(entity)
+        print(f"Entity      : {entity.text}")
+
+        print(f"Label       : {entity.label}")
+
+        print(f"Confidence  : {entity.confidence:.3f}")
+
+        print(f"Extractor   : {entity.extractor}")
+    
+        print(f"Model       : {entity.model}")
+
+        print(f"Version     : {entity.version}")
+
+        print("-" * 40)
 
     print("\nEmbedding")
 
     print("-" * 50)
 
     print(
-
         f"Dimension : "
+        f"{perception.semantics.dimension}"
+    )
 
-        f"{perception.embedding.shape[0]}"
+    print(
+    f"Extractor : "
+    f"{perception.semantics.extractor}"
+    )
 
+    print(
+        f"Model     : "
+        f"{perception.semantics.model}"
+    )
+
+    print(
+        f"Version   : "
+        f"{perception.semantics.version}"
     )
 
     print("\nPipeline Latency")

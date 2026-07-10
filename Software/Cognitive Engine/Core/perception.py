@@ -1,24 +1,26 @@
 """
 perception.py
 
-The Perception Engine combines the outputs of all feature extractors
-into a unified perception object.
-
-This module DOES NOT perform reasoning or memory management.
-Its only responsibility is to organize extracted features.
+Combines the outputs of all feature extractors into a unified
+Perception object.
 """
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
 
 from gliner import GLiNER
 from lingua import LanguageDetectorBuilder
 from sentence_transformers import SentenceTransformer
 
+from Core.evidence import (
+    LanguageEvidence,
+    EntityEvidence,
+    SemanticEvidence,
+)
+
 
 # ==========================================================
-# Perception Data
+# Perception Object
 # ==========================================================
 
 @dataclass
@@ -28,13 +30,11 @@ class Perception:
 
     timestamp: datetime
 
-    language: str
+    language: LanguageEvidence
 
-    language_confidence: float
+    entities: list[EntityEvidence]
 
-    entities: list
-
-    embedding: Any
+    semantics: SemanticEvidence
 
 
 # ==========================================================
@@ -67,13 +67,13 @@ class PerceptionEngine:
 
     def perceive(self, text: str) -> Perception:
 
-        # ----------------------------
-        # Language
-        # ----------------------------
+        timestamp = datetime.now()
 
-        language = self.language_detector.detect_language_of(
-            text
-        )
+        # ==================================================
+        # Language
+        # ==================================================
+
+        language = self.language_detector.detect_language_of(text)
 
         confidence_values = (
             self.language_detector
@@ -90,9 +90,18 @@ class PerceptionEngine:
 
                 break
 
-        # ----------------------------
+        language_evidence = LanguageEvidence(
+            extractor="Language Detection",
+            model="Lingua",
+            version="1.0",
+            confidence=language_confidence,
+            timestamp=timestamp,
+            language=str(language)
+        )
+
+        # ==================================================
         # Entities
-        # ----------------------------
+        # ==================================================
 
         labels = [
 
@@ -113,16 +122,35 @@ class PerceptionEngine:
             "technology"
         ]
 
-        entities = self.entity_extractor.predict_entities(
+        extracted_entities = self.entity_extractor.predict_entities(
 
             text,
 
             labels
         )
 
-        # ----------------------------
-        # Embedding
-        # ----------------------------
+        entity_evidence = []
+
+        for entity in extracted_entities:
+
+            entity_evidence.append(
+
+                EntityEvidence(
+                    extractor="Entity Extraction",
+                    model="GLiNER Medium",
+                    version="2.1",
+                    confidence=entity["score"],
+                    timestamp=timestamp,
+                    text=entity["text"],
+                    label=entity["label"],
+                    start=entity["start"],
+                    end=entity["end"]
+                )
+            )
+
+        # ==================================================
+        # Semantic Embedding
+        # ==================================================
 
         embedding = self.embedding_model.encode(
 
@@ -131,17 +159,29 @@ class PerceptionEngine:
             convert_to_tensor=True
         )
 
+        semantic_evidence = SemanticEvidence(
+            extractor="Semantic Embedding",
+            model="all-MiniLM-L6-v2",
+            version="2",
+            confidence=1.0,
+            timestamp=timestamp,
+            embedding=embedding,
+            dimension=embedding.shape[0]
+        )
+
+        # ==================================================
+        # Return Perception
+        # ==================================================
+
         return Perception(
 
             raw_text=text,
 
-            timestamp=datetime.now(),
+            timestamp=timestamp,
 
-            language=str(language),
+            language=language_evidence,
 
-            language_confidence=language_confidence,
+            entities=entity_evidence,
 
-            entities=entities,
-
-            embedding=embedding
+            semantics=semantic_evidence
         )
