@@ -7,6 +7,7 @@ Perception object.
 
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
 
 from gliner import GLiNER
 from lingua import LanguageDetectorBuilder
@@ -38,6 +39,48 @@ class Perception:
 
 
 # ==========================================================
+# Model loading helpers
+# ==========================================================
+
+# Pin the model identifiers so they're easy to swap later.
+GLINER_MODEL_ID = "urchade/gliner_medium-v2.1"
+SENTENCE_TRANSFORMER_MODEL_ID = "all-MiniLM-L6-v2"
+
+
+def _is_cached(model_id: str) -> bool:
+    """
+    True if the HuggingFace model is already in the local cache.
+
+    Checks the canonical HF cache directory for a repo directory named
+    models--{org}--{name}. If found, returns True and tells the loader
+    to use local_files_only=True, which skips the metadata re-fetch and
+    its noisy progress bars on cold start.
+    """
+    cache_root = Path.home() / ".cache" / "huggingface" / "hub"
+    # HF escapes '/' in repo_ids as '--' in the on-disk folder name.
+    expected = "models--" + model_id.replace("/", "--")
+    return (cache_root / expected).is_dir()
+
+
+def _load_gliner(model_id: str):
+    """
+    Load GLiNER from cache when available. Avoids the metadata re-fetch
+    (and its noisy progress bars) that from_pretrained triggers every
+    cold start even when the model is already on disk.
+    """
+    if _is_cached(model_id):
+        return GLiNER.from_pretrained(model_id, local_files_only=True)
+    return GLiNER.from_pretrained(model_id)
+
+
+def _load_sentence_transformer(model_id: str):
+    """Same caching strategy as _load_gliner."""
+    if _is_cached(model_id):
+        return SentenceTransformer(model_id, local_files_only=True)
+    return SentenceTransformer(model_id)
+
+
+# ==========================================================
 # Perception Engine
 # ==========================================================
 
@@ -53,13 +96,8 @@ class PerceptionEngine:
             .build()
         )
 
-        self.entity_extractor = GLiNER.from_pretrained(
-            "urchade/gliner_medium-v2.1"
-        )
-
-        self.embedding_model = SentenceTransformer(
-            "all-MiniLM-L6-v2"
-        )
+        self.entity_extractor = _load_gliner(GLINER_MODEL_ID)
+        self.embedding_model = _load_sentence_transformer(SENTENCE_TRANSFORMER_MODEL_ID)
 
         print("Perception Engine Ready.")
 

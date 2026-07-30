@@ -11,7 +11,11 @@ from pathlib import Path
 # Root Directory
 # ==========================================================
 
-ROOT_DIR = Path(__file__).resolve().parent
+# ROOT_DIR is the Cognitive Engine directory itself (one level up from
+# this Utilities/ folder). All paths below are relative to it so that
+# DATA_DIR, LOGS_DIR, etc. resolve correctly whether you run the engine
+# from inside the package or as a script from elsewhere.
+ROOT_DIR = Path(__file__).resolve().parent.parent
 
 
 # ==========================================================

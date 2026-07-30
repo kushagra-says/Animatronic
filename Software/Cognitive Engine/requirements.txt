@@ -1,0 +1,22 @@
+# Animatronic Cognitive Engine — runtime dependencies
+#
+# Install into the venv at: Software/Cognitive Engine/venv/
+#   source venv/bin/activate   (or: venv\Scripts\activate on Windows)
+#   pip install -r requirements.txt
+
+# Existing perception stack
+lingua-language-detector
+gliner
+sentence-transformers
+
+# Ollama client (LLM runtime)
+ollama
+
+# Memory engine — SQLite + in-DB vector search
+sqlite-vec
+
+# Numerical / utilities
+numpy
+psutil
+pynvml        # optional: GPU stats for PerformanceMonitor; safe to skip if no NVIDIA GPU
+python-dotenv
